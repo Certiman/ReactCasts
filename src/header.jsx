@@ -1,5 +1,4 @@
 var React = require('react');
-// var ReactDOM = require('react-dom');
 
 module.exports = React.createClass({
   getInitialState: function() {
@@ -8,7 +7,7 @@ module.exports = React.createClass({
     }
   },
   render: function() {
-    return <div>
+    return <div className="navbar-form navbar-left">
       <div className="input-group">
         <div className="input-group-addon">
           <span className="glyphicon glyphicon-ok" aria-hidden="true"></span>

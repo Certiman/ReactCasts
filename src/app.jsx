@@ -1,5 +1,4 @@
 var React = require('react');
-// var ReactDOM = require('react-dom');
 var ReactFire = require('reactfire');
 var Firebase = require('firebase');
 
@@ -12,7 +11,8 @@ var App = React.createClass({
   getInitialState: function() {
     return {
       items: {},
-      loaded: false
+      loaded: false,
+      completeditems: true
     }
   },
   componentWillMount: function() {
@@ -22,32 +22,40 @@ var App = React.createClass({
   },
   render: function() {
     return <div className="row panel panel-default">
-      <div className="col-md-8 col-md-offset-2">
-        <h2 className="text-center">
-          To-Do List
-        </h2>
-        <Header itemsStore={this.firebaseRefs.items} />
-        <hr />
-        <div className={"content " + (this.state.loaded ? 'loaded' : '')}>
-          <List items={this.state.items} />
-          {this.deleteButton()}
+      <div>
+        <nav className="navbar navbar-inverse">
+          <div className="container-fluid">
+            <div className="navbar-header">
+              <a className="navbar-brand" href="#">
+                To-Do List
+              </a>
+              <Header itemsStore={this.firebaseRefs.items} />
+              <div className="navbar-right">{this.deleteButton()}</div>
+            </div>
+          </div>
+        </nav>
+      </div>
+      <div >
+        <div className="col-md-8 col-md-offset-2">
+          <div className={"content " + (this.state.loaded ? 'loaded' : '')}>
+            <List items={this.state.items} />
+          </div>
         </div>
       </div>
     </div>
   },
   deleteButton: function() {
     if(!this.state.loaded) {
-      return
+      return  // The Firebase object is not loaded
+    } else if(!this.state.completeditems) {
+      return // There are no objects with state complete
     } else {
-      return <div className="text-center clear-complete">
-        <hr />
-        <button
+      return <button
           type="button"
           onClick={this.onDeleteDoneClick}
-          className="btn btn-default">
+          className="btn btn-default navbar-btn">
           Clear Completed
         </button>
-      </div>
     }
   },
   onDeleteDoneClick: function() {
