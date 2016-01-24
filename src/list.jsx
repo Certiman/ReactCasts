@@ -14,14 +14,14 @@ module.exports = React.createClass({
       </h4>;
     } else {
       var children = [];
-      this.anyCompleted=false; 
+      this.anyCompleted=false; // TODO
       
       for(var key in this.props.items) {
         var item = this.props.items[key];
         item.key = key;
         // ERROR: state updates trigger render itself!
         // if (item.done === true) { this.setState({completedItems: true}); }
-        if (item.done === true) { this.anyCompleted=true; }
+        if (item.done === true) { this.anyCompleted=true; } //TODO
         
         children.push(
           <ListItem

@@ -12,8 +12,8 @@ var App = React.createClass({
     return {
       items: {},
       loaded: false,
-      completeditems: true
-    }
+      completeditems: true // TODO 3
+    };
   },
   componentWillMount: function() {
     this.fb = new Firebase(rootUrl + 'items/');
@@ -29,8 +29,11 @@ var App = React.createClass({
               <a className="navbar-brand" href="#">
                 To-Do List
               </a>
-              <Header itemsStore={this.firebaseRefs.items} />
-              <div className="navbar-right">{this.deleteButton()}</div>
+            </div>
+            <Header itemsStore={this.firebaseRefs.items} />
+            <div className="btn-group navbar-right">
+              {this.deleteButton()}
+              {this.checkAllButton()}
             </div>
           </div>
         </nav>
@@ -46,17 +49,27 @@ var App = React.createClass({
   },
   deleteButton: function() {
     if(!this.state.loaded) {
-      return  // The Firebase object is not loaded
+      return;  // The Firebase object is not loaded
     } else if(!this.state.completeditems) {
-      return // There are no objects with state complete
+      return; // TODO: There are no objects with state complete
     } else {
       return <button
           type="button"
           onClick={this.onDeleteDoneClick}
           className="btn btn-default navbar-btn">
+          <span className="glyphicon glyphicon-trash" aria-hidden="false"></span>
           Clear Completed
         </button>
     }
+  },
+  checkAllButton: function() {
+    return <button
+        type="button"
+        className="btn btn-default navbar-btn"
+        onClick={this.onCheckAllClick}>
+        <span className="glyphicon glyphicon-ok-circle" aria-hidden="false"></span>
+        Check All
+      </button>
   },
   onDeleteDoneClick: function() {
     for(var key in this.state.items) {
@@ -64,6 +77,13 @@ var App = React.createClass({
         this.fb.child(key).remove();
       }
     }
+  },
+  onCheckAllClick: function(){
+    for(var key in this.state.items) {
+      this.fb.child(key).update({ done:true });
+    }    
+    // Does not work: this.render();
+    this.forceUpdate();
   },
   handleDataLoaded: function(){
     this.setState({loaded: true});
